@@ -9,6 +9,8 @@ module Sound.Tidal.Boot
   , mkTidalWith
   , only
   , p
+  , _p
+  , p_
   , hush
   , panic
   , list
@@ -107,6 +109,14 @@ only = (hush >>)
 p :: Tidally => ID -> ControlPattern -> IO ()
 p = streamReplace tidal
 
+-- | Silences a specific stream, regardless of ControlPattern input. Useful for rapid muting of streams
+_p :: Tidally => ID -> ControlPattern -> IO ()
+_p k _ = streamReplace tidal k silence
+
+-- | Silences a specific stream, regardless of ControlPattern input. Useful for rapid muting of streams
+p_ :: Tidally => ID -> ControlPattern -> IO ()
+p_ = _p
+
 -- | See 'Sound.Tidal.Stream.streamHush'.
 hush :: Tidally => IO ()
 hush = streamHush tidal
@@ -170,9 +180,13 @@ resetCycles = streamResetCycles tidal
 setCycle :: Tidally => Time -> IO ()
 setCycle = streamSetCycle tidal
 
+-- -- | See 'Sound.Tidal.Params.cps'.
+-- setcps :: Tidally => Pattern Double -> IO ()
+-- setcps = once . cps
+
 -- | See 'Sound.Tidal.Params.cps'.
-setcps :: Tidally => Pattern Double -> IO ()
-setcps = once . cps
+setcps :: Tidally => Time -> IO ()
+setcps = streamSetCPS tidal
 
 -- | See 'Sound.Tidal.Stream.streamGetcps'.
 getcps :: Tidally => IO Time
@@ -184,18 +198,18 @@ getnow = streamGetNow tidal
 
 -- | Replace what's playing on the given orbit.
 d1, d2, d3, d4, d5, d6, d7, d8, d9, d10, d11, d12, d13, d14, d15, d16 :: Tidally => ControlPattern -> IO ()
-d1 = p 1 . (|< orbit 0)
-d2 = p 2 . (|< orbit 1)
-d3 = p 3 . (|< orbit 2)
-d4 = p 4 . (|< orbit 3)
-d5 = p 5 . (|< orbit 4)
-d6 = p 6 . (|< orbit 5)
-d7 = p 7 . (|< orbit 6)
-d8 = p 8 . (|< orbit 7)
-d9 = p 9 . (|< orbit 8)
-d10 = p 10 . (|< orbit 9)
-d11 = p 11 . (|< orbit 10)
-d12 = p 12 . (|< orbit 11)
+d1  = p 1   . (|< orbit 0)
+d2  = p 2   . (|< orbit 1)
+d3  = p 3   . (|< orbit 2)
+d4  = p 4   . (|< orbit 3)
+d5  = p 5   . (|< orbit 4)
+d6  = p 6   . (|< orbit 5)
+d7  = p 7   . (|< orbit 6)
+d8  = p 8   . (|< orbit 7)
+d9  = p 9   . (|< orbit 8)
+d10 = p 10  . (|< orbit 9)
+d11 = p 11  . (|< orbit 10)
+d12 = p 12  . (|< orbit 11)
 d13 = p 13
 d14 = p 14
 d15 = p 15
